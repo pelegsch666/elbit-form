@@ -1,0 +1,1 @@
+import TableInfo from './TableInfo';
