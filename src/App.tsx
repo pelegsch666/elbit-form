@@ -1,15 +1,28 @@
-import React from "react";
-import Form from "./components/Form/Form";
-import TableInfo from "./components/TableInfo/TableInfo";
-type Number = [1, 2, 3, 4];
+import { useEffect } from 'react';
+
+import { useSetRecoilState } from 'recoil';
+
+import Form from 'components/Form/Form';
+import TableInfo from 'components/TableInfo/TableInfo';
+
+import { getFormatedData } from 'utils/helpers';
+
+import { tableDataState } from 'store';
 
 function App() {
-  return (
-    <>
-      <Form />
-      <TableInfo />
-    </>
-  );
+	const setTableData = useSetRecoilState(tableDataState);
+
+	useEffect(() => {
+		const data = getFormatedData();
+		setTableData(data);
+	}, [setTableData]);
+
+	return (
+		<>
+			<Form />
+			<TableInfo />
+		</>
+	);
 }
 
 export default App;

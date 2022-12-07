@@ -1,125 +1,101 @@
-import { useTable } from "react-table";
-import React, { useEffect, useMemo } from "react";
-import Tools from "../Tools/Tools";
-import { stringToCamelCase } from "utils/helpers/stringToCamelCase";
+import { useMemo } from 'react';
+import { useTable } from 'react-table';
+import { useRecoilValue } from 'recoil';
 
+import { getColumns, openDataUrl } from 'utils/helpers';
 
-export function getColumns(titles: string[]) {
-  return titles.map((title) => ({
-    Header: title,
-    accessor: stringToCamelCase(title),
-  }));
-}
+import { tableDataState } from 'store';
 
-function getDataFromLocalStorage() {
-  let dataFromLocalStorage = localStorage.getItem("data") || "[]";
-  const parsedData = JSON.parse(dataFromLocalStorage);
-  parsedData.forEach((item:any) => {
-    item.tools = <Tools/>
-   
-  });
-  console.log(parsedData);
-  return parsedData
+import { COLUMNS } from 'utils/constants';
 
-  
-}
-
-function openDataUrl(dataUrl: string) {
-    
-    const iframe = "<iframe width='100%' height='100%' src='" + dataUrl + "'></iframe>"
-    const urlWindow = window.open();
-    urlWindow?.document.open();
-    urlWindow?.document.write(iframe);
-    urlWindow?.document.close();
-}
+import Tools from 'components/Tools';
 
 export default function TableInfo() {
-  useEffect(() => {
-    getDataFromLocalStorage();
-  }, []);
+	const tableData = useRecoilValue(tableDataState);
 
-  const data = useMemo(() => getDataFromLocalStorage(), []);
+	const data = useMemo(() => tableData, [tableData]);
 
-  const columns = useMemo(
-    () =>
-      getColumns([
-        "Board Pn",
-        "Board Sn",
-        "Tech Name",
-        "Board Data Base Name",
-        "Cause Failure",
-        "Solution",
-        "Date",
-        "Link For File",
-        "Tools"
-      ]),
-    []
-  );
+	const columns = useMemo(() => getColumns(COLUMNS) as any, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+	const table = useTable({ columns, data });
 
-  return (
-    <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th
-                {...column.getHeaderProps()}
-                style={{
-                  borderBottom: "solid 3px red",
-                  background: "aliceblue",
-                  color: "black",
-                  fontWeight: "bold",
-                }}
-              >
-                {column.render("Header")}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                const columnTitle = cell.column.Header;
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+		table;
 
-                if (columnTitle === "Link For File") {
-                  if (cell.value) {
-                    return (
-                      <td {...cell.getCellProps()}>
-                        <button
-                          onClick={() => {
-                            openDataUrl(cell.value);
-                          }}
-                        >
-                          Link
-                        </button>
-                      </td>
-                    );
-                  }
-                }
-                return (
-                  <td
-                    {...cell.getCellProps()}
-                    style={{
-                      padding: "10px",
-                      border: "solid 1px gray",
-                      background: "papayawhip",
-                    }}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
+	return (
+		<table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+			<thead>
+				{headerGroups.map((headerGroup) => (
+					<tr {...headerGroup.getHeaderGroupProps()}>
+						{headerGroup.headers.map((column) => (
+							<th
+								{...column.getHeaderProps()}
+								style={{
+									borderBottom: 'solid 3px red',
+									background: 'aliceblue',
+									color: 'black',
+									fontWeight: 'bold',
+								}}
+							>
+								{column.render('Header')}
+							</th>
+						))}
+					</tr>
+				))}
+			</thead>
+			<tbody {...getTableBodyProps()}>
+				{rows.map((row, rowIndex) => {
+					prepareRow(row);
+					return (
+						<tr {...row.getRowProps()}>
+							{row.cells.map((cell, index) => {
+								const columnTitle = cell.column.Header;
+								if (columnTitle === 'data-url') {
+									if (cell.value) {
+										return (
+											<td {...cell.getCellProps()}>
+												<button
+													onClick={() => {
+														openDataUrl(cell.value);
+													}}
+												>
+													Link
+												</button>
+											</td>
+										);
+									} else {
+										return (
+											<td {...cell.getCellProps()}>
+												<p>Not Available</p>
+											</td>
+										);
+									}
+								} else if (columnTitle === 'tools') {
+									return (
+										<td {...cell.getCellProps()}>
+											<Tools itemIndex={Number(rowIndex)} />
+											<p>{rowIndex}</p>
+										</td>
+									);
+								} else {
+									return (
+										<td
+											{...cell.getCellProps()}
+											style={{
+												padding: '10px',
+												border: 'solid 1px gray',
+												background: 'papayawhip',
+											}}
+										>
+											{cell.render('Cell')}
+										</td>
+									);
+								}
+							})}
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	);
 }

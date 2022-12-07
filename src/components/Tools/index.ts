@@ -1,1 +1,3 @@
-import Tools from './Tools';
+import Tools from 'components/Tools/Tools';
+
+export default Tools;

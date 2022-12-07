@@ -1,8 +1,15 @@
+import { InputId } from 'utils/types';
 
-export function stringToCamelCase(str: string) {
-    return str
-      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-        return index === 0 ? word.toLowerCase() : word.toUpperCase();
-      })
-      .replace(/\s+/g, "");
-  }
+function stringToCamelCase(str: InputId): InputId {
+	const strArr: string[] = str.split('-');
+
+	let camelCaseStr: string = strArr[0];
+
+	for (let i = 1; i < strArr.length; i++) {
+		camelCaseStr += strArr[i][0].toUpperCase() + strArr[i].slice(1);
+	}
+
+	return camelCaseStr as InputId;
+}
+
+export default stringToCamelCase;
