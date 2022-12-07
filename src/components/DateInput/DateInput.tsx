@@ -1,9 +1,17 @@
 import { TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useRecoilState } from 'recoil';
 
 import { currInputsDataState } from 'store';
 
 import { cababCaseToCamelCase, getNewCurrTextInput } from 'utils/helpers';
+
+import { INPUT_FIELD_SIZE } from 'utils/constants';
+
+const StyledInput = styled(TextField)(({ theme }) => ({
+	margin: theme.spacing(1),
+	width: INPUT_FIELD_SIZE,
+}));
 
 function DateInput() {
 	const [currInputsData, setCurrInputsData] =
@@ -20,7 +28,7 @@ function DateInput() {
 		currInputsData[labelInCamelCase as keyof typeof currInputsData];
 
 	return (
-		<TextField
+		<StyledInput
 			onChange={handleChange}
 			id="date"
 			variant="outlined"

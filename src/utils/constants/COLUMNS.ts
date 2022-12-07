@@ -12,4 +12,5 @@ const COLUMNS: InputId[] = [
 	'tools',
 ];
 
+
 export default COLUMNS;

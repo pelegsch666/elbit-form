@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import Form from 'components/Form/Form';
+import Header from 'components/Header';
 import TableInfo from 'components/TableInfo/TableInfo';
 
 import { getFormatedData } from 'utils/helpers';
@@ -19,6 +20,7 @@ function App() {
 
 	return (
 		<>
+		<Header/>
 			<Form />
 			<TableInfo />
 		</>

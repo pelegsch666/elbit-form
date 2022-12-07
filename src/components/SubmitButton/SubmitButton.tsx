@@ -5,10 +5,12 @@ import {
 	currInputsDataState,
 	currItemIndexState,
 	isEditModeOnState,
-	tableDataState
+	tableDataState,
 } from 'store';
 
 import { addDataToLocalStorage, composeInputs } from 'utils/helpers';
+
+
 
 function SubmitButton() {
 	const [currInputsData, setCurrInputsData] =
@@ -73,13 +75,7 @@ function SubmitButton() {
 	}
 
 	return (
-		<Button
-			variant="contained"
-			sx={{
-				width: 'fit-content',
-			}}
-			onClick={handleClick}
-		>
+		<Button variant="contained" onClick={handleClick}>
 			{isEditModeOn ? 'Edit' : 'Save'}
 		</Button>
 	);

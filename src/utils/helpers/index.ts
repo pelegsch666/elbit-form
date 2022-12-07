@@ -1,5 +1,6 @@
 import addDataToLocalStorage from 'utils/helpers/addDataToLocalStorage';
 import cababCaseToCamelCase from 'utils/helpers/cababCaseToCamelCase';
+import cababCaseToRegularCase from 'utils/helpers/cababCaseToRegularCase';
 import composeInputs from 'utils/helpers/composeInputs';
 import getColumns from 'utils/helpers/getColumns';
 import getDataFromLocalStorage from 'utils/helpers/getDataFromLocalStorage';
@@ -18,5 +19,6 @@ export {
     getFormatedData,
     openDataUrl,
     cababCaseToCamelCase,
+    cababCaseToRegularCase,
 };
 

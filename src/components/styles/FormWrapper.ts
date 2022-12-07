@@ -3,7 +3,7 @@ import { Stack } from '@mui/material';
 
 const FormWrapper = styled(Stack)`
 	margin: auto;
-	border: 2px solid red;
+	margin-bottom: 32px;
 	width: fit-content;
 	align-items: center;
 `;

@@ -1,11 +1,20 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
 import {
 	currInputsDataState,
 	currItemIndexState,
 	isEditModeOnState,
 	tableDataState
 } from 'store';
+
+const StyledButton = styled(Button)(({ theme }) => ({
+	margin: 3,
+	padding: 0,
+	
+}));
 
 type ToolsProps = {
 	itemIndex: number;
@@ -51,8 +60,12 @@ export default function Tools({ itemIndex }: ToolsProps) {
 
 	return (
 		<>
-			<button onClick={handleDelete}>{trashEmoji}</button>
-			<button onClick={handleEdit}>{editEmoji}</button>
+			<StyledButton variant="outlined" color="secondary" onClick={handleDelete}>
+				{trashEmoji}
+			</StyledButton>
+			<StyledButton variant="outlined" color="secondary" onClick={handleEdit}>
+				{editEmoji}
+			</StyledButton>
 		</>
 	);
 }

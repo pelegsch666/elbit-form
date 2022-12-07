@@ -1,3 +1,4 @@
+import { styled } from '@mui/material/styles';
 import { useRecoilState } from 'recoil';
 
 import { TextInput as Input } from 'components/styles';
@@ -7,6 +8,13 @@ import { InputId } from 'utils/types';
 import { currInputsDataState } from 'store';
 
 import { cababCaseToCamelCase, getNewCurrTextInput } from 'utils/helpers';
+
+import { INPUT_FIELD_SIZE } from 'utils/constants';
+
+const StyledInput = styled(Input)(({ theme }) => ({
+	margin: theme.spacing(1),
+	width: INPUT_FIELD_SIZE,
+}));
 
 type TextInputProps = {
 	label: string;
@@ -28,7 +36,7 @@ function TextInput({ label, id }: TextInputProps) {
 		currInputsData[labelInCamelCase as keyof typeof currInputsData];
 
 	return (
-		<Input
+		<StyledInput
 			label={label}
 			id={id}
 			variant="outlined"

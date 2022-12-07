@@ -2,13 +2,39 @@ import { useMemo } from 'react';
 import { useTable } from 'react-table';
 import { useRecoilValue } from 'recoil';
 
-import { getColumns, openDataUrl } from 'utils/helpers';
+import { Button, Table } from '@mui/material';
+import { blue } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
+
+import { cababCaseToRegularCase, getColumns, openDataUrl } from 'utils/helpers';
 
 import { tableDataState } from 'store';
 
 import { COLUMNS } from 'utils/constants';
 
 import Tools from 'components/Tools';
+
+const StyledTable = styled(Table)(({ theme }) => ({
+	margin: theme.spacing(1),
+
+	'& td, & th': {
+		border: '1px solid black',
+		maxWidth: '150px,',
+		padding: '5px',
+		textAlign: 'center',
+		fontFamily: 'monospace',
+	},
+
+	'& th': {
+		backgroundColor: blue[100],
+		fontSize: '1.01rem',
+		fontFamily: 'arial',
+	},
+
+	'& tr:hover': {
+		backgroundColor: blue[50],
+	},
+}));
 
 export default function TableInfo() {
 	const tableData = useRecoilValue(tableDataState);
@@ -23,23 +49,15 @@ export default function TableInfo() {
 		table;
 
 	return (
-		<table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+		<StyledTable {...getTableProps()}>
 			<thead>
 				{headerGroups.map((headerGroup) => (
 					<tr {...headerGroup.getHeaderGroupProps()}>
-						{headerGroup.headers.map((column) => (
-							<th
-								{...column.getHeaderProps()}
-								style={{
-									borderBottom: 'solid 3px red',
-									background: 'aliceblue',
-									color: 'black',
-									fontWeight: 'bold',
-								}}
-							>
-								{column.render('Header')}
-							</th>
-						))}
+						{headerGroup.headers.map((column) => {
+							const headerTitle: any = column.render('Header');
+							const formatedHeaderTitle = cababCaseToRegularCase( headerTitle);
+							return <th {...column.getHeaderProps()}>{formatedHeaderTitle}</th>;
+						})}
 					</tr>
 				))}
 			</thead>
@@ -54,13 +72,21 @@ export default function TableInfo() {
 									if (cell.value) {
 										return (
 											<td {...cell.getCellProps()}>
-												<button
+												<Button
+													variant="outlined"
+													size="small"
+													color="secondary"
+													sx={{
+														fontSize: '0.7rem',
+														padding: '0.2rem 0.5rem',
+													}}
+
 													onClick={() => {
 														openDataUrl(cell.value);
 													}}
 												>
 													Link
-												</button>
+												</Button>
 											</td>
 										);
 									} else {
@@ -74,21 +100,11 @@ export default function TableInfo() {
 									return (
 										<td {...cell.getCellProps()}>
 											<Tools itemIndex={Number(rowIndex)} />
-											<p>{rowIndex}</p>
 										</td>
 									);
 								} else {
 									return (
-										<td
-											{...cell.getCellProps()}
-											style={{
-												padding: '10px',
-												border: 'solid 1px gray',
-												background: 'papayawhip',
-											}}
-										>
-											{cell.render('Cell')}
-										</td>
+										<td {...cell.getCellProps()}>{cell.render('Cell')}</td>
 									);
 								}
 							})}
@@ -96,6 +112,6 @@ export default function TableInfo() {
 					);
 				})}
 			</tbody>
-		</table>
+		</StyledTable>
 	);
 }
